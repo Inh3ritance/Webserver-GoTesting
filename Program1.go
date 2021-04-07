@@ -22,14 +22,6 @@ func getWelcome(c echo.Context) error {
 	return c.String(http.StatusOK, "Thanks for visiting the server")
 }
 
-func handler(w http.ResponseWriter, req *http.Request) {
-	enableCors(&w)
-}
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
-
 func main() {
 
 	// Create 2 WaitGroups for 2 GoRoutines
