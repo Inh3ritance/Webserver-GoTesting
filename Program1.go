@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"html/template"
 	"net/http"
 	"sync"
@@ -14,7 +15,19 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func testServer(c echo.Context) error {
-	return c.String(http.StatusOK, "server is up!")
+	return c.JSON(http.StatusOK, "server is up!")
+}
+
+func getWelcome(c echo.Context) error {
+	return c.String(http.StatusOK, "Thanks for visiting the server")
+}
+
+func handler(w http.ResponseWriter, req *http.Request) {
+	enableCors(&w)
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
 func main() {
@@ -27,7 +40,12 @@ func main() {
 	go func() {
 		fmt.Println("Running server...")
 		server := echo.New()
+		server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"*"},
+			AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		}))
 		server.GET("/", testServer)
+		server.GET("/getWelcome", getWelcome)
 		server.Start(":8000")
 		wg.Done()
 	}()

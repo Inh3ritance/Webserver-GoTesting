@@ -1,0 +1,19 @@
+<html>
+    <head>
+    </head>
+    <script>
+        function GetWelcome(){
+            fetch("http://localhost:8000/getWelcome")
+            .then(data => data.text()).then(serverWelcome => {
+                console.log(serverWelcome);
+                return alert(serverWelcome);
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+    </script>
+    <body>
+        <h1> Welcome to LocalHost:3000 </h1>
+        <button onclick="GetWelcome()">getWelcome</button>
+    </body>
+</html>
